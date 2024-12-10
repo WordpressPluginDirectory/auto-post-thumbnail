@@ -10,11 +10,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @version       1.0
  */
-class WAPT_Plugin extends Wbcr_Factory474_Plugin {
+class WAPT_Plugin extends Wbcr_Factory480_Plugin {
 
 	/**
 	 * @see self::app()
-	 * @var Wbcr_Factory474_Plugin
+	 * @var Wbcr_Factory480_Plugin
 	 */
 	private static $app;
 
@@ -63,7 +63,7 @@ class WAPT_Plugin extends Wbcr_Factory474_Plugin {
 	/**
 	 * Статический метод для быстрого доступа к интерфейсу плагина.
 	 *
-	 * @return Wbcr_Factory474_Plugin
+	 * @return Wbcr_Factory480_Plugin
 	 */
 	public static function app() {
 		return self::$app;
@@ -95,18 +95,23 @@ class WAPT_Plugin extends Wbcr_Factory474_Plugin {
 	 * Регистрирует классы страниц в плагине
 	 */
 	private function register_pages() {
-		self::app()->registerPage( 'WAPT_Generate', WAPT_PLUGIN_DIR . '/admin/pages/generate.php' );
-		self::app()->registerPage( 'WAPT_Settings', WAPT_PLUGIN_DIR . '/admin/pages/settings.php' );
-		self::app()->registerPage( 'WAPT_ImageSettings', WAPT_PLUGIN_DIR . '/admin/pages/image.php' );
-		self::app()->registerPage( 'WAPT_License', WAPT_PLUGIN_DIR . '/admin/pages/license.php' );
-		self::app()->registerPage( 'WAPT_Log', WAPT_PLUGIN_DIR . '/admin/pages/log.php' );
-		self::app()->registerPage( 'WAPT_About', WAPT_PLUGIN_DIR . '/admin/pages/about.php' );
+		self::app()->registerPage( 'WAPT_Generate', WAPT_PLUGIN_DIR . '/admin/pages/class-pages-generate.php' );
+		self::app()->registerPage( 'WAPT_Settings', WAPT_PLUGIN_DIR . '/admin/pages/class-pages-settings.php' );
+		self::app()->registerPage( 'WAPT_ImageSettings', WAPT_PLUGIN_DIR . '/admin/pages/class-pages-image.php' );
+		self::app()->registerPage( 'WAPT_License', WAPT_PLUGIN_DIR . '/admin/pages/class-pages-license.php' );
+		self::app()->registerPage( 'WAPT_Log', WAPT_PLUGIN_DIR . '/admin/pages/class-pages-log.php' );
+		self::app()->registerPage( 'WAPT_About', WAPT_PLUGIN_DIR . '/admin/pages/class-pages-about.php' );
+		self::app()->registerPage( 'WAPT_ComponentsPage', WAPT_PLUGIN_DIR . '/admin/pages/class-pages-components.php' );
+		self::app()->registerPage( 'WAPT_ComponentsLicensePage', WAPT_PLUGIN_DIR . '/admin/pages/class-pages-components-license.php' );
 	}
 
 	/**
 	 */
 	private function admin_scripts() {
-		//$this->register_pages();
+
+		add_action('init', function (){
+			$this->register_pages();
+		});
 
 		//------ ACTIONS ------
 		add_action( 'admin_init', [ $this, 'redirect_to_about_page' ] );
@@ -151,9 +156,9 @@ class WAPT_Plugin extends Wbcr_Factory474_Plugin {
 	 * @author Alexander Kovalev <alex.kovalevv@gmail.com>
 	 */
 	public function plugins_loaded() {
-		if ( is_admin() ) {
-			$this->register_pages();
-		}
+		//if ( is_admin() ) {
+			//$this->register_pages();
+		//}
 	}
 
 	/**
@@ -237,7 +242,7 @@ class WAPT_Plugin extends Wbcr_Factory474_Plugin {
 				if ( $need_show_about && ! ( defined( 'DOING_AJAX' ) && DOING_AJAX ) && ! ( defined( 'DOING_CRON' ) && DOING_CRON ) ) {
 					try {
 						$redirect_url = '';
-						if ( class_exists( 'Wbcr_FactoryPages474' ) ) {
+						if ( class_exists( 'Wbcr_FactoryPages480' ) ) {
 							$redirect_url = admin_url( 'admin.php?page=wapt_about-wbcr_apt&wapt_about_page_viewed=1' );
 						}
 						if ( $redirect_url ) {
